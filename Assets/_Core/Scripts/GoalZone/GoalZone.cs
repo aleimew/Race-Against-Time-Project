@@ -11,6 +11,7 @@ public class GoalZone : MonoBehaviour
     {
         Debug.Log("You Win! -- It Took You " + refScoreBoard.GetTime() + " Seconds!");
 
+        //load the next level after letting the player look at their time
         //SceneManager.LoadScene("scene");
     }
 }
