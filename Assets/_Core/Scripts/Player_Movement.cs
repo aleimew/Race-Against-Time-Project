@@ -12,12 +12,15 @@ public class Player_Movement : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 velocity;
+    private float defaultSpeed; // stores original speed
+    
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
+        defaultSpeed = baseSpeed; 
     }
 
     void Update()
@@ -61,4 +64,18 @@ public class Player_Movement : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+
+    // speed/slow ground zones
+    public void ChangeSpeed(float multiplier)
+    {
+        baseSpeed = defaultSpeed * multiplier;
+    }
+
+    // Called when leaving the ground zone
+    public void ResetSpeed()
+    {
+        baseSpeed = defaultSpeed;
+    }
+
+   
 }
