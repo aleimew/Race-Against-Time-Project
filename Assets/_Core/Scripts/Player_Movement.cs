@@ -3,29 +3,55 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Runtime.CompilerServices;
-//using System.Diagnostics;
 
 public class Player_Movement : MonoBehaviour
 {
-    // Update is called once per frame
+    public float baseSpeed = 5f;
+    public float acceleration = 15f;
+    public float friction = 30f;
+
+    private Rigidbody2D rb;
+    private Vector2 velocity;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0f;
+        rb.freezeRotation = true;
+    }
+
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        HandleInput();
+    }
+
+    void FixedUpdate()
+    {
+        ApplyMovement();
+    }
+
+    void HandleInput()
+    {
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+
+        Vector2 inputDir = new Vector2(x, y).normalized;
+
+        Vector2 targetVelocity = inputDir * baseSpeed;
+
+        if (inputDir.sqrMagnitude > 0.01f)
         {
-            transform.Translate(Vector3.up * Time.deltaTime * 5);
+            velocity = Vector2.MoveTowards(velocity, targetVelocity, acceleration * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.S))
+        else
         {
-            transform.Translate(Vector3.down * Time.deltaTime * 5);
+            velocity = Vector2.MoveTowards(velocity, Vector2.zero, friction * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(Vector3.left * Time.deltaTime * 5);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * 5);
-        }
+    }
+
+    void ApplyMovement()
+    {
+        rb.velocity = velocity;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
