@@ -15,11 +15,16 @@ public class ScoreBoard : MonoBehaviour
 
     private void Update()
     {
-        text.text = "Time: " + (Time.time - startTime).ToString("F2");
+        //text.text = "Time: " + (Time.time - startTime).ToString("F2");
     }
 
     public float GetTime()
     {
         return Time.time - startTime;
+    }
+
+    public void PostScore()
+    {
+        text.text = "You Win! -- It Took You " + GetTime() + " Seconds!";
     }
 }

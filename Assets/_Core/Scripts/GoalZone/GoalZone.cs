@@ -9,7 +9,7 @@ public class GoalZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("You Win! -- It Took You " + refScoreBoard.GetTime() + " Seconds!");
+        refScoreBoard.PostScore();
 
         //load the next level after letting the player look at their time
         //SceneManager.LoadScene("scene");
