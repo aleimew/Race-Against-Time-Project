@@ -58,7 +58,7 @@ public class Player_Movement : MonoBehaviour
     {
         if (collider.gameObject.tag == "Walls")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            GameManager.Instance.ReloadCurrentScene();
         }
     }
 }
