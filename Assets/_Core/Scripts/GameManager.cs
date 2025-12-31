@@ -32,18 +32,27 @@ public class GameManager : MonoBehaviour
         failStateWindow.SetActive(false);
         timeRemaining = maxLevelCompletionTime;
         StartCoroutine(Countdown());
+        ScoreBoard.Instance.onLevelCompleted.AddListener(StopCountdown);
+    }
+
+    private void StopCountdown()
+    {
+        StopAllCoroutines();
     }
 
     IEnumerator Countdown()
     {
-        while (timeRemaining > 0)
+        while (maxLevelCompletionTime > ScoreBoard.Instance.GetTime())
         {
-            timeRemaining -= Time.deltaTime;
             yield return null;
         }
         LevelFailed();
     }
 
+    public float GetTimeRemaining()
+    {
+        return maxLevelCompletionTime - ScoreBoard.Instance.GetTime();
+    }
 
     public void LevelFailed()
     {

@@ -7,11 +7,20 @@ public class HudManager : MonoBehaviour
 {
     [SerializeField] TMP_Text countdownText;
 
+
     // Update is called once per frame
     void Update()
     {
-        countdownText.text = $"{GameManager.Instance.timeRemaining:F2}";
-        countdownText.color = GameManager.Instance.timeRemaining > 10 ? Color.white : Color.red;
+        if(ScoreBoard.Instance.levelCompleted)
+        {
+            countdownText.text = ScoreBoard.Instance.levelCompletionText;
+            countdownText.color = Color.green;
+        }
+        else
+        {
+            countdownText.text = $"{GameManager.Instance.GetTimeRemaining():F2}";
+            countdownText.color = GameManager.Instance.GetTimeRemaining() > 10 ? Color.white : Color.red;
+        }
     }
 
     public void RetryButtonPressed()
