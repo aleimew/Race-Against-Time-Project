@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 public class Player_Movement : MonoBehaviour
 {
@@ -46,6 +47,11 @@ public class Player_Movement : MonoBehaviour
         else
         {
             velocity = Vector2.MoveTowards(velocity, Vector2.zero, friction * Time.deltaTime);
+        }
+
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
         }
     }
 
