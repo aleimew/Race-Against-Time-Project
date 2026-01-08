@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HudManager : MonoBehaviour
 {
@@ -26,5 +27,10 @@ public class HudManager : MonoBehaviour
     public void RetryButtonPressed()
     {
         GameManager.Instance.ReloadCurrentScene();
+    }
+
+    public void MainMenuButtonPressed()
+    {
+        GameManager.Instance.LoadMainMenu();
     }
 }

@@ -60,9 +60,21 @@ public class GameManager : MonoBehaviour
         failStateWindow.SetActive(true);
     }
 
+    public void ResetPlayers()
+    {
+        foreach (Player_Movement playerController in FindObjectsByType<Player_Movement>(FindObjectsSortMode.None))
+        {
+            playerController.ResetPosition();
+        }
+    }
+
     public void ReloadCurrentScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }

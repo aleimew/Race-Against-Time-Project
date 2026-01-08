@@ -15,15 +15,21 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject levelSelectPanel;
     [SerializeField] private GameObject howToPlayPanel;
 
+
     [Header("Main Menu Elements")]
     [SerializeField] private TextMeshProUGUI gameTitleText;
     [SerializeField] private Button startButton;
     [SerializeField] private Button levelSelectButton;
     [SerializeField] private Button howToPlayButton;
+    [SerializeField] private Button quitButton;
+    [SerializeField] private Transform levelSelectScrollArea;
 
     [Header("Level Settings")]
     [SerializeField] private string tutorialSceneName = "Tutorial";
     [SerializeField] private string[] levelSceneNames = { "Tutorial", "Level1_Easy", "Level2_Intermediate", "Level3_Hard", "Level4_ExtraHard" };
+
+    [Header("References")]
+    [SerializeField] private GameObject levelSelectButtonPrefab;
 
     private void Start()
     {
@@ -49,6 +55,23 @@ public class MainMenu : MonoBehaviour
             howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
         }
 
+        if(quitButton != null)
+        {
+            quitButton.onClick.AddListener(OnQuitButtonClicked);
+        }
+
+        int index = 0;
+        foreach (string levelName in levelSceneNames)
+        {
+            GameObject instance = Instantiate(levelSelectButtonPrefab, levelSelectScrollArea);
+            instance.GetComponent<Button>().onClick.AddListener(() => { SceneManager.LoadScene(levelName); } );
+            string text = levelName.Split('_')[1];
+            text = text.Replace(' ', '!');
+            instance.GetComponentInChildren<TMP_Text>().text = text;
+            index++;
+        }
+
+
         // Show main menu by default
         ShowMainMenu();
     }
@@ -67,6 +90,7 @@ public class MainMenu : MonoBehaviour
             Debug.LogWarning("Tutorial scene name not set!");
         }
     }
+
 
     /// <summary>
     /// Level Select button - Shows level selection panel

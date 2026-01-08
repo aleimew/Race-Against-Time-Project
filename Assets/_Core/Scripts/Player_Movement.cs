@@ -14,7 +14,8 @@ public class Player_Movement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 velocity;
     private float defaultSpeed; // stores original speed
-    
+
+    private Vector3 startLocation;
 
     void Awake()
     {
@@ -22,6 +23,7 @@ public class Player_Movement : MonoBehaviour
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
         defaultSpeed = baseSpeed; 
+        startLocation = transform.position;
     }
 
     void Update()
@@ -67,9 +69,15 @@ public class Player_Movement : MonoBehaviour
     {
         if (collider.gameObject.tag == "Walls")
         {
-            GameManager.Instance.ReloadCurrentScene();
+            GameManager.Instance.ResetPlayers();
         }
     }
+
+    public void ResetPosition()
+    {
+        transform.position = startLocation;
+    }
+
 
     // speed/slow ground zones
     public void ChangeSpeed(float multiplier)
