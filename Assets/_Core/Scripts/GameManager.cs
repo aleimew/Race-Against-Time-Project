@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
 
+    [SerializeField] private bool timerEnabled = true;
+
     private void Awake()
     {
         Instance = this;
@@ -31,8 +33,19 @@ public class GameManager : MonoBehaviour
     {
         failStateWindow.SetActive(false);
         timeRemaining = maxLevelCompletionTime;
-        StartCoroutine(Countdown());
-        ScoreBoard.Instance.onLevelCompleted.AddListener(StopCountdown);
+        if (timerEnabled)
+        {
+            StartCoroutine(Countdown());
+            ScoreBoard.Instance.onLevelCompleted.AddListener(StopCountdown);
+        }
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            LoadMainMenu();
+        }
     }
 
     private void StopCountdown()
