@@ -2155,6 +2155,7 @@ MonoBehaviour:
   baseSpeed: 5
   acceleration: 15
   friction: 30
+  animator: {fileID: 0}
 --- !u!61 &1006291430
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3111,6 +3112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   failStateWindow: {fileID: 7671884209475352774}
   maxLevelCompletionTime: 30
+  timerEnabled: 1
 --- !u!4 &1278695164
 Transform:
   m_ObjectHideFlags: 0
@@ -4290,6 +4292,7 @@ MonoBehaviour:
   baseSpeed: 5
   acceleration: 15
   friction: 30
+  animator: {fileID: 0}
 --- !u!212 &1562246112
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5714,6 +5717,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 147013293102672923, guid: 11dd425395bee784abca2cfbc81884b7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4887655928419813596, guid: 11dd425395bee784abca2cfbc81884b7, type: 3}
       propertyPath: m_Name
       value: PlayerHud
