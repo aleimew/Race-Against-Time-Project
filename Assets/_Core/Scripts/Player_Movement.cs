@@ -15,6 +15,9 @@ public class Player_Movement : MonoBehaviour
 
     private bool movementLocked = false;
 
+    [SerializeField] private Animator animator;
+
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -23,7 +26,19 @@ public class Player_Movement : MonoBehaviour
 
         defaultSpeed = baseSpeed;
         startLocation = transform.position;
+
+        animator = GetComponent<Animator>();
     }
+    
+    /// <summary>
+    /// Sets the boolean in the animation script whether the player is dead or not
+    /// </summary>
+    /// <param name="playerDead">are they alive?</param>
+    public void SetPlayerDied(bool playerDead)
+    {
+        animator.SetBool("PlayerDied", playerDead);
+    }
+
 
     void Update()
     {

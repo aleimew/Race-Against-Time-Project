@@ -87,12 +87,14 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < players.Length; i++)
         {
             players[i].LockMovement();
+            players[i].SetPlayerDied(true);
         }
 
         yield return new WaitForSeconds(delay);
 
         for (int i = 0; i < players.Length; i++)
         {
+            players[i].SetPlayerDied(false);
             players[i].ResetPosition();
             players[i].UnlockMovement();
         }
