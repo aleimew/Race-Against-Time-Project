@@ -525,12 +525,16 @@ PrefabInstance:
       value: TrapDoor
       objectReference: {fileID: 0}
     - target: {fileID: 7468253447162551851, guid: 97b90c33cb2bf4a42b7d1dbdd22bf47c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9262
+      objectReference: {fileID: 0}
+    - target: {fileID: 7468253447162551851, guid: 97b90c33cb2bf4a42b7d1dbdd22bf47c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.32
+      value: -7.1
       objectReference: {fileID: 0}
     - target: {fileID: 7468253447162551851, guid: 97b90c33cb2bf4a42b7d1dbdd22bf47c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.02
+      value: 3.1628
       objectReference: {fileID: 0}
     - target: {fileID: 7468253447162551851, guid: 97b90c33cb2bf4a42b7d1dbdd22bf47c, type: 3}
       propertyPath: m_LocalPosition.z
