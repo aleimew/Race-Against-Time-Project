@@ -3263,6 +3263,7 @@ MonoBehaviour:
   baseSpeed: 5
   acceleration: 15
   friction: 30
+  animator: {fileID: 0}
 --- !u!61 &1006291430
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6560,6 +6561,7 @@ MonoBehaviour:
   baseSpeed: 5
   acceleration: 15
   friction: 30
+  animator: {fileID: 0}
 --- !u!212 &1562246112
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8372,7 +8374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4887655928419813596, guid: 11dd425395bee784abca2cfbc81884b7, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8392223647768519526, guid: 11dd425395bee784abca2cfbc81884b7, type: 3}
       propertyPath: m_Pivot.x

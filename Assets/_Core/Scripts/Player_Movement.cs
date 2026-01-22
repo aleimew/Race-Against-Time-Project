@@ -1,9 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 
 public class Player_Movement : MonoBehaviour
 {
@@ -13,26 +9,57 @@ public class Player_Movement : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 velocity;
-    private float defaultSpeed; // stores original speed
+    private float defaultSpeed;
 
     private Vector3 startLocation;
+
+    private bool movementLocked = false;
+
+    [SerializeField] private Animator animator;
+
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
-        defaultSpeed = baseSpeed; 
+
+        defaultSpeed = baseSpeed;
         startLocation = transform.position;
+
+        animator = GetComponent<Animator>();
     }
+    
+    /// <summary>
+    /// Sets the boolean in the animation script whether the player is dead or not
+    /// </summary>
+    /// <param name="playerDead">are they alive?</param>
+    public void SetPlayerDied(bool playerDead)
+    {
+        animator.SetBool("PlayerDied", playerDead);
+    }
+
 
     void Update()
     {
+        if (movementLocked) return;
+
         HandleInput();
+
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
     }
 
     void FixedUpdate()
     {
+        if (movementLocked)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         ApplyMovement();
     }
 
@@ -42,22 +69,12 @@ public class Player_Movement : MonoBehaviour
         float y = Input.GetAxisRaw("Vertical");
 
         Vector2 inputDir = new Vector2(x, y).normalized;
-
         Vector2 targetVelocity = inputDir * baseSpeed;
 
         if (inputDir.sqrMagnitude > 0.01f)
-        {
             velocity = Vector2.MoveTowards(velocity, targetVelocity, acceleration * Time.deltaTime);
-        }
         else
-        {
             velocity = Vector2.MoveTowards(velocity, Vector2.zero, friction * Time.deltaTime);
-        }
-
-        if (Input.GetKey("escape"))
-        {
-            Application.Quit();
-        }
     }
 
     void ApplyMovement()
@@ -67,7 +84,7 @@ public class Player_Movement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Walls")
+        if (collider.CompareTag("Walls"))
         {
             GameManager.Instance.ResetPlayers();
         }
@@ -76,20 +93,31 @@ public class Player_Movement : MonoBehaviour
     public void ResetPosition()
     {
         transform.position = startLocation;
+        rb.velocity = Vector2.zero;
+        velocity = Vector2.zero;
     }
 
-
-    // speed/slow ground zones
     public void ChangeSpeed(float multiplier)
     {
         baseSpeed = defaultSpeed * multiplier;
     }
 
-    // Called when leaving the ground zone
     public void ResetSpeed()
     {
         baseSpeed = defaultSpeed;
     }
 
-   
+    public void LockMovement()
+    {
+        movementLocked = true;
+        rb.velocity = Vector2.zero;
+        velocity = Vector2.zero;
+    }
+
+    public void UnlockMovement()
+    {
+        movementLocked = false;
+    }
 }
+
+

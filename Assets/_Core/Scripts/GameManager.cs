@@ -1,20 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-/// <summary>
-/// This is manager script that should be instanciated in every level
-/// Handles:
-///     - Countdown system:
-///     - Opening the "next" scene to progress and current scene to restart
-/// </summary>
 public class GameManager : MonoBehaviour
 {
-    /// <summary>
-    /// Reference to the window that displays if the player "fails" the current level
-    /// </summary>
     [SerializeField] private GameObject failStateWindow;
 
     [SerializeField, Range(5, 120)] private float maxLevelCompletionTime;
@@ -23,6 +12,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private bool timerEnabled = true;
+
+    private bool resettingFromHazard = false;
 
     private void Awake()
     {
@@ -42,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             LoadMainMenu();
         }
@@ -81,6 +72,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ResetBothPlayersFromHazard(float delay)
+    {
+        if (resettingFromHazard) return;
+        StartCoroutine(ResetBothPlayersFromHazardRoutine(delay));
+    }
+
+    private IEnumerator ResetBothPlayersFromHazardRoutine(float delay)
+    {
+        resettingFromHazard = true;
+
+        Player_Movement[] players = FindObjectsByType<Player_Movement>(FindObjectsSortMode.None);
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].LockMovement();
+            players[i].SetPlayerDied(true);
+        }
+
+        yield return new WaitForSeconds(delay);
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].SetPlayerDied(false);
+            players[i].ResetPosition();
+            players[i].UnlockMovement();
+        }
+
+        resettingFromHazard = false;
+    }
+
     public void ReloadCurrentScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -91,3 +112,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 }
+
+
+
+
