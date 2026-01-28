@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
@@ -16,7 +17,8 @@ public class Player_Movement : MonoBehaviour
     private bool movementLocked = false;
 
     [SerializeField] private Animator animator;
-
+    [SerializeField] private AudioClip hitWallSound;
+    private AudioSource audioData;
 
     void Awake()
     {
@@ -29,7 +31,7 @@ public class Player_Movement : MonoBehaviour
 
         animator = GetComponent<Animator>();
     }
-    
+
     /// <summary>
     /// Sets the boolean in the animation script whether the player is dead or not
     /// </summary>
@@ -87,6 +89,8 @@ public class Player_Movement : MonoBehaviour
         if (collider.CompareTag("Walls"))
         {
             GameManager.Instance.ResetPlayers();
+            audioData.clip = hitWallSound;
+            audioData.Play();
         }
     }
 

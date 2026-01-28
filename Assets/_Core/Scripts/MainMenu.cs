@@ -15,7 +15,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject levelSelectPanel;
     [SerializeField] private GameObject howToPlayPanel;
 
-
     [Header("Main Menu Elements")]
     [SerializeField] private TextMeshProUGUI gameTitleText;
     [SerializeField] private Button startButton;
@@ -33,6 +32,13 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+
+        // Play background music
+        // if (backgroundMusic != null && !backgroundMusic.isPlaying)
+        // {
+        //     backgroundMusic.Play();
+        // }
+
         // Initialize UI
         if (gameTitleText != null)
         {
@@ -55,7 +61,7 @@ public class MainMenu : MonoBehaviour
             howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
         }
 
-        if(quitButton != null)
+        if (quitButton != null)
         {
             quitButton.onClick.AddListener(OnQuitButtonClicked);
         }
@@ -64,7 +70,7 @@ public class MainMenu : MonoBehaviour
         foreach (string levelName in levelSceneNames)
         {
             GameObject instance = Instantiate(levelSelectButtonPrefab, levelSelectScrollArea);
-            instance.GetComponent<Button>().onClick.AddListener(() => { SceneManager.LoadScene(levelName); } );
+            instance.GetComponent<Button>().onClick.AddListener(() => { SceneManager.LoadScene(levelName); });
             string text = levelName.Split('_')[1];
             text = text.Replace(' ', '!');
             instance.GetComponentInChildren<TMP_Text>().text = text;
@@ -162,11 +168,11 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OnQuitButtonClicked()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#else
         Application.Quit();
-        #endif
+#endif
     }
 }
 

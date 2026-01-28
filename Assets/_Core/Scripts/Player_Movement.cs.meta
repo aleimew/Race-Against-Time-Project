@@ -3,7 +3,9 @@ guid: f1d20c461b166dd479dbee098e8dd056
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - animator: {instanceID: 0}
+  - hitWallSound: {fileID: 8300000, guid: a3bc21d6abe8a754da262731533e083e, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
