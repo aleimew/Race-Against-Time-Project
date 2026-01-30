@@ -759,6 +759,7 @@ MonoBehaviour:
   acceleration: 15
   friction: 30
   animator: {fileID: 314497932}
+  hitWallSound: {fileID: 0}
 --- !u!61 &314497929
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2782,6 +2783,7 @@ MonoBehaviour:
   acceleration: 15
   friction: 30
   animator: {fileID: 1006291434}
+  hitWallSound: {fileID: 0}
 --- !u!61 &1006291430
 BoxCollider2D:
   m_ObjectHideFlags: 0
