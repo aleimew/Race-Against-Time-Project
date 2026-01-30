@@ -13,12 +13,9 @@ public class Player_Movement : MonoBehaviour
     private float defaultSpeed;
 
     private Vector3 startLocation;
-
     private bool movementLocked = false;
 
     [SerializeField] private Animator animator;
-    [SerializeField] private AudioClip hitWallSound;
-    private AudioSource audioData;
 
     void Awake()
     {
@@ -32,15 +29,10 @@ public class Player_Movement : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    /// <summary>
-    /// Sets the boolean in the animation script whether the player is dead or not
-    /// </summary>
-    /// <param name="playerDead">are they alive?</param>
     public void SetPlayerDied(bool playerDead)
     {
         animator.SetBool("PlayerDied", playerDead);
     }
-
 
     void Update()
     {
@@ -88,9 +80,7 @@ public class Player_Movement : MonoBehaviour
     {
         if (collider.CompareTag("Walls"))
         {
-            GameManager.Instance.ResetPlayers();
-            audioData.clip = hitWallSound;
-            audioData.Play();
+            GameManager.Instance.OnPlayerHitWall();
         }
     }
 
@@ -123,5 +113,3 @@ public class Player_Movement : MonoBehaviour
         movementLocked = false;
     }
 }
-
-

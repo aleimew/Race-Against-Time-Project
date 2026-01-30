@@ -14,16 +14,54 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool timerEnabled = true;
 
     private bool resettingFromHazard = false;
+    private bool levelFailed = false;
+
+    [Header("SFX")]
+    [SerializeField] private AudioClip wallHitSound;
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private float wallHitCooldown = 0.15f;
+    private bool wallHitLocked = false;
+
+    [Header("Music")]
+    [SerializeField] private AudioClip backgroundMusic;
+    [SerializeField] private AudioSource musicSource;
+
+    [Header("Timer Ticking")]
+    [SerializeField] private AudioClip tickingSound;
+    [SerializeField] private AudioSource tickingSource;
+    [SerializeField] private float tickingThreshold = 5f;
+    private bool tickingActive = false;
 
     private void Awake()
     {
         Instance = this;
+
+        if (sfxSource == null || musicSource == null || tickingSource == null)
+        {
+            AudioSource[] sources = GetComponents<AudioSource>();
+            if (sfxSource == null && sources.Length > 0) sfxSource = sources[0];
+            if (musicSource == null && sources.Length > 1) musicSource = sources[1];
+            if (tickingSource == null && sources.Length > 2) tickingSource = sources[2];
+        }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void Start()
     {
+        levelFailed = false;
+
         failStateWindow.SetActive(false);
         timeRemaining = maxLevelCompletionTime;
+
+        StartMusicFromBeginning();
+        StopTicking();
+
         if (timerEnabled)
         {
             StartCoroutine(Countdown());
@@ -37,6 +75,63 @@ public class GameManager : MonoBehaviour
         {
             LoadMainMenu();
         }
+
+        if (levelFailed) return;
+
+        HandleTickingSound();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        levelFailed = false;
+        StartMusicFromBeginning();
+        StopTicking();
+    }
+
+    private void StartMusicFromBeginning()
+    {
+        if (musicSource == null || backgroundMusic == null) return;
+
+        musicSource.clip = backgroundMusic;
+        musicSource.loop = true;
+        musicSource.Stop();
+        musicSource.time = 0f;
+        musicSource.Play();
+    }
+
+    private void StopTicking()
+    {
+        tickingActive = false;
+        if (tickingSource != null)
+            tickingSource.Stop();
+    }
+
+    private void HandleTickingSound()
+    {
+        if (!timerEnabled || tickingSource == null || tickingSound == null)
+            return;
+
+        float timeLeft = GetTimeRemaining();
+
+        if (timeLeft <= tickingThreshold && !tickingActive)
+        {
+            tickingActive = true;
+            tickingSource.clip = tickingSound;
+            tickingSource.loop = true;
+            tickingSource.Play();
+        }
+        else if (timeLeft > tickingThreshold && tickingActive)
+        {
+            StopTicking();
+        }
+    }
+
+    private void StopAllAudio()
+    {
+        if (sfxSource != null) sfxSource.Stop();
+        if (musicSource != null) musicSource.Stop();
+        if (tickingSource != null) tickingSource.Stop();
+        tickingActive = false;
     }
 
     private void StopCountdown()
@@ -60,8 +155,31 @@ public class GameManager : MonoBehaviour
 
     public void LevelFailed()
     {
-        StopCoroutine(Countdown());
+        levelFailed = true;
+        StopAllCoroutines();
         failStateWindow.SetActive(true);
+        StopAllAudio();
+    }
+
+    public void OnPlayerHitWall()
+    {
+        if (wallHitLocked) return;
+        wallHitLocked = true;
+
+        if (sfxSource != null && wallHitSound != null)
+            sfxSource.PlayOneShot(wallHitSound);
+
+        ResetPlayers();
+        StartMusicFromBeginning();
+        StopTicking();
+
+        StartCoroutine(WallHitUnlockRoutine());
+    }
+
+    private IEnumerator WallHitUnlockRoutine()
+    {
+        yield return new WaitForSeconds(wallHitCooldown);
+        wallHitLocked = false;
     }
 
     public void ResetPlayers()
@@ -99,20 +217,21 @@ public class GameManager : MonoBehaviour
             players[i].UnlockMovement();
         }
 
+        StartMusicFromBeginning();
+        StopTicking();
+
         resettingFromHazard = false;
     }
 
     public void ReloadCurrentScene()
     {
+        StopAllAudio();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void LoadMainMenu()
     {
+        StopAllAudio();
         SceneManager.LoadScene("MainMenu");
     }
 }
-
-
-
-
